@@ -68,4 +68,18 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
+
+  #===============
+  # Devise
+  #===============
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.delivery_method = :letter_opener
+  # config.action_mailer.delivery_method = :smtp
+
+  # TODO: Config/Environments/Dev - Uncomment SSL when implementing FB Omniauth
+  #===============
+  # SSL
+  #===============
+  # config.force_ssl = true
 end
