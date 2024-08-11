@@ -3,7 +3,7 @@ FROM ruby:3.2.4
 
 # Install packages needed to build gems
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential libpq-dev pkg-config git libvips bash bash-completion libffi-dev tzdata postgresql nodejs npm yarn
+    apt-get install --no-install-recommends -y build-essential libpq-dev pkg-config git libvips bash bash-completion libffi-dev tzdata postgresql nodejs npm yarn nano
 
 RUN mkdir /app
 
