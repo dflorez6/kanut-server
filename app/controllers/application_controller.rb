@@ -1,12 +1,17 @@
+# class ApplicationController < ActionController::Base # TODO: GPT
 class ApplicationController < ActionController::API
-  include Devise::Controllers::Helpers
+  include ActionController::MimeResponds
+  respond_to :json
 
-  before_action :authenticate_user!
+  before_action :configure_permitted_parameters, if: :devise_controller?
 
   protected
 
-  def authenticate_user!
-    super
-    render json: { error: "Unauthorized" }, status: :unauthorized unless user_signed_in?
+  # Devise: Permit additional parameters for sign up
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_up, keys: %i[email password password_confirmation first_name last_name name]) # TODO: Add avatar/photo
+    devise_parameter_sanitizer.permit(:account_update, keys: %i[email password password_confirmation first_name last_name name]) # TODO: Add avatar/photo
   end
+
 end
+

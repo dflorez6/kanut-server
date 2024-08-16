@@ -9,19 +9,6 @@
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
-
-  # Devise + JWT
-  config.jwt do |jwt|
-    jwt.secret = ENV["DEVISE_JWT_SECRET_KEY"]
-    jwt.dispatch_requests = [
-      ['POST', %r{^/api/v1/users/sign_in$}] # Define routes where JWT should be issued
-    ]
-    jwt.revocation_requests = [
-      ['DELETE', %r{^/api/v1/users/sign_out$}] # Define routes for token revocation
-    ]
-    jwt.expiration_time = 1.day.to_i
-  end
-
   # The default HTTP method used to sign out a resource. Default is :delete.
   config.sign_out_via = :delete
 
@@ -238,7 +225,7 @@ Devise.setup do |config|
   # config.reset_password_keys = [:email]
 
   # Time interval you can reset your password with a reset password key.
-  # Don't put a too small interval or your users won't have the time to
+  # Don't put a too small interval or your usersGPT won't have the time to
   # change their passwords.
   config.reset_password_within = 6.hours
 
@@ -258,7 +245,7 @@ Devise.setup do |config|
 
   # ==> Scopes configuration
   # Turn scoped views on. Before rendering "sessions/new", it will first check for
-  # "users/sessions/new". It's turned off by default because it's slower if you
+  # "usersGPT/sessions/new". It's turned off by default because it's slower if you
   # are using only default views.
   # config.scoped_views = false
 
@@ -266,7 +253,7 @@ Devise.setup do |config|
   # devise role declared in your routes (usually :user).
   # config.default_scope = :user
 
-  # Set this configuration to false if you want /users/sign_out to sign out
+  # Set this configuration to false if you want /usersGPT/sign_out to sign out
   # only the current scope. By default, Devise signs out all scopes.
   # config.sign_out_all_scopes = true
 
@@ -280,6 +267,7 @@ Devise.setup do |config|
   #
   # The "*/*" below is required to match Internet Explorer requests.
   # config.navigational_formats = ['*/*', :html, :turbo_stream]
+  config.navigational_formats = [] # Prevent devise from using flash messages & eror codes like 401, 422, ...
 
   # ==> OmniAuth
   # Add a new OmniAuth provider. Check the wiki for more information on setting
@@ -294,6 +282,14 @@ Devise.setup do |config|
   #   manager.intercept_401 = false
   #   manager.default_strategies(scope: :user).unshift :some_external_strategy
   # end
+  # Configure which strategy should be used to authenticate with JWT.
+  config.warden do |manager|
+    # manager.intercept_401 = false
+    manager.scope_defaults :user, store: false
+    manager.default_strategies(scope: :user).unshift :jwt
+    manager.failure_app = Auth::Users::FailureApp
+  end
+
 
   # ==> Mountable engine configurations
   # When using Devise inside an engine, let's call it `MyEngine`, and this engine
@@ -306,8 +302,8 @@ Devise.setup do |config|
   # config.router_name = :my_engine
   #
   # When using OmniAuth, Devise cannot automatically set OmniAuth path,
-  # so you need to do it manually. For the users scope, it would be:
-  # config.omniauth_path_prefix = '/my_engine/users/auth'
+  # so you need to do it manually. For the usersGPT scope, it would be:
+  # config.omniauth_path_prefix = '/my_engine/usersGPT/auth'
 
   # ==> Hotwire/Turbo configuration
   # When using Devise with Hotwire/Turbo, the http status for error responses
@@ -323,4 +319,18 @@ Devise.setup do |config|
   # When set to false, does not sign a user in automatically after their password is
   # changed. Defaults to true, so a user is signed in automatically after changing a password.
   # config.sign_in_after_change_password = true
+
+  # Devise + JWT
+  config.jwt do |jwt|
+    jwt.secret = ENV["DEVISE_JWT_SECRET_KEY"]
+    jwt.dispatch_requests = [
+      ['POST', %r{^/api/v1/users/login$}] # Define routes where JWT should be issued
+    ]
+    jwt.revocation_requests = [
+      ['DELETE', %r{^/api/v1/users/logout$}] # Define routes for token revocation
+    ]
+    jwt.expiration_time = 1.week.to_i
+    # jwt.expiration_time = 30.minutes.to_i # Shorten token expiration for testing purposes
+  end
+
 end

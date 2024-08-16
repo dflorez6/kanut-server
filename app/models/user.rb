@@ -1,16 +1,18 @@
 class User < ApplicationRecord
+  include Devise::JWT::RevocationStrategies::JTIMatcher
   before_create :set_full_name
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable,
-         :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
+         :jwt_authenticatable, jwt_revocation_strategy: self
 
   #====================
   # Validations
   #====================
   validates_uniqueness_of :email
+  validates :password_confirmation, presence: true, on: %i[create update]
 
   #====================
   # Associations

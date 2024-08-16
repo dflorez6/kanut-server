@@ -1,21 +1,24 @@
 module Api
   module V1
     class UsersController < ApplicationController
+      # before_action :authenticate_v1_api_user!
       before_action :set_user, only: %i[ show update destroy ]
 
-      # GET /users
-      # GET /users.json
+      # GET /usersGPT
+      # GET /usersGPT.json
       def index
         @users = User.all
+        render json: @users, status: 200
       end
 
-      # GET /users/1
-      # GET /users/1.json
+      # GET /usersGPT/1
+      # GET /usersGPT/1.json
       def show
+        render json: @user, status: 200
       end
 
-      # POST /users
-      # POST /users.json
+      # POST /usersGPT
+      # POST /usersGPT.json
       def create
         @user = User.new(user_params)
 
@@ -26,8 +29,8 @@ module Api
         end
       end
 
-      # PATCH/PUT /users/1
-      # PATCH/PUT /users/1.json
+      # PATCH/PUT /usersGPT/1
+      # PATCH/PUT /usersGPT/1.json
       def update
         if @user.update(user_params)
           render :show, status: :ok, location: @user
@@ -36,10 +39,15 @@ module Api
         end
       end
 
-      # DELETE /users/1
-      # DELETE /users/1.json
+      # DELETE /usersGPT/1
+      # DELETE /usersGPT/1.json
       def destroy
-        @user.destroy!
+        if @user
+          @user.destroy!
+          render json: { message: "User successfully deleted" }, status: 200
+        else
+          render json: @user.errors, status: :unprocessable_entity
+        end
       end
 
       private

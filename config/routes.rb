@@ -15,10 +15,37 @@ Rails.application.routes.draw do
     # v1
     namespace :v1 do
       # Authentication (Devise)
-      devise_for :users, controllers: {
-        sessions: "api/v1/users/sessions",
+      # singular: :user -> will maintain the singular path for the user instead of api_v1_user_registration for ex
+      devise_for :users, singular: "user", path: '/users', path_names: {
+        sign_in: 'login',
+        sign_out: 'logout',
+        registration: 'signup'
+      }, controllers: {
+        sessions: 'api/v1/users/sessions',
         registrations: "api/v1/users/registrations"
       }
+
+      #==========
+      # Named Paths
+      #==========
+      #----------
+      # Registration
+      #----------
+      # api_v1_user_registration
+      # POST -> /api/v1/users/signup(.:format)
+      # api/v1/users/registrations#create {:format=>:json}
+      #----------
+      # Login
+      #----------
+      # new_api_v1_user_session
+      # GET -> /api/v1/users/login(.:format)
+      # api/v1/users/sessions#new {:format=>:json}
+      #----------
+      # Logout
+      #----------
+      # destroy_api_v1_user_session
+      # DELETE -> /api/v1/users/logout(.:format)
+      # api/v1/users/sessions#destroy {:format=>:json}
 
       # Resources
       resources :users

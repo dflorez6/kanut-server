@@ -14,7 +14,8 @@ gem "puma", ">= 5.0"
 # For HTTPS development environment
 # gem 'thin'
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
-gem "jbuilder"
+# gem "jbuilder"
+gem 'jsonapi-serializer'
 
 #===============#
 # CORS
@@ -78,6 +79,8 @@ group :development, :test do
   # Debugging
   gem 'better_errors'
   gem 'awesome_print'
+  gem 'pry'
+  gem 'pry-rails'
 
   # Preview emails in browser
   gem 'letter_opener'

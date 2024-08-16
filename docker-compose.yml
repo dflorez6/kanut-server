@@ -1,7 +1,7 @@
 # version: '3.9'
 services:
   db:
-    image: postgres:latest
+    image: postgres:16-alpine
     container_name: kanut-server-db
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -20,15 +20,16 @@ services:
     build: .
     # command: "./bin/rails server"
     volumes:
-      # - .:/app
-      - app-storage:/rails/storage
+      - .:/app # Development
+      # - app-storage:/app/storage
+      # - app-storage:/rails/storage # Production # TODO: Check if this is correct
     depends_on:
       - db
     ports:
       - "3000:3000"
     env_file:
       - ".env"
-    # command: bash -c "bundle exec rails db:create" # TODO: Check if this will be useful and how to configure it correctly
+    # command: bash -c "bundle exec rake db:create && bundle exec rake db:migrate && bundle exec rails server -b '0.0.0.0'" # TODO: Check if this will be useful and how to configure it correctly
 volumes:
   postgres_data: {}
-  app-storage: {}
+  # app-storage: {} # Production
