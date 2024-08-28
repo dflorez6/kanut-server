@@ -7,7 +7,9 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins 'http://localhost:3001'  # Frontend URL
+    # origins 'http://localhost:3001'  # Frontend URL
+    # origins 'http://kanut-client-container:3001'  # Frontend URL
+    origins "*" # TODO: For now Im on development environment so I will accept incoming requests from any origin.
 
     resource "*",
              headers: :any,

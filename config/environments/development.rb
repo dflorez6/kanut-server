@@ -69,6 +69,14 @@ Rails.application.configure do
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
 
+  # Allow requests from your Vite development server
+  # config.hosts << "kanut-client-container"
+  # config.hosts << "localhost" # Also allow localhost if you're accessing the frontend from your local machine
+  # config.hosts << "localhost:3001"
+  config.hosts << "172.19.0.4"
+  config.hosts << "kanut-client-container"
+  # config.hosts.clear # Allow requests from any origin
+
   #===============
   # Devise
   #===============

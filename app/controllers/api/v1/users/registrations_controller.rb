@@ -10,6 +10,8 @@ module Api
           super
         end
 
+        # TODO: FIND WHERE THE SIGNUP OBJECT IS CREATED AND WHAT INFO IS RETURNED TO PREVENT JTI FROM BEING SHOWN
+
         private
 
         # Customizes the response after a user registration attempt.
